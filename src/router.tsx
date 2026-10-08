@@ -7,7 +7,7 @@ const BlogLayout = lazy(() => import("./layouts/BlogLayout"));
 const BlogPage = lazy(() => import("./pages/BlogPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ToolLayout = lazy(() => import("./layouts/ToolLayout"));
-const ToolPage = lazy(() => import("./pages/ToolPage"));
+const MapPage = lazy(() => import("./pages/MapPage"));
 
 
 export const router = createBrowserRouter([
@@ -32,12 +32,12 @@ export const router = createBrowserRouter([
     ]
   },
   {
-    path: "/tool",
+    path: "/map",
     element: <ToolLayout />,
     children: [
       {
         index: true,
-        element: <ToolPage />
+        element: <MapPage />
       }
     ]
   },
