@@ -5,11 +5,11 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import { Outlet } from "react-router-dom";
 import ThemeButton from "../components/ThemeButton"
+import AssistantIcon from '@mui/icons-material/Assistant';
 
 function ToolLayout() {
 
@@ -18,7 +18,14 @@ function ToolLayout() {
       sx={{ display: "flex", minHeight: "100vh" }}>
 
       {/* Google Maps-style tool bar */}
-      <Drawer variant="permanent" >
+      <Drawer variant="permanent"
+        sx={{
+          "& .MuiDrawer-paper": {
+            bgcolor: "primary.dark",
+            color: "secondary.contrastText",
+          },
+        }}
+      >
 
         <Stack
           sx={{
@@ -38,20 +45,21 @@ function ToolLayout() {
                   "&:hover": { bgcolor: "action.hover" },
                 }}
                 size="large">
-                <DashboardIcon />
+                <AssessmentIcon />
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Wallet" placement="right">
+            <Tooltip title="Dashboard" placement="right">
               <IconButton
                 sx={{
                   width: 48, height: 48, borderRadius: 2,
                   "&:hover": { bgcolor: "action.hover" },
                 }}
                 size="large">
-                <AccountBalanceWalletIcon />
+                <AssistantIcon />
               </IconButton>
             </Tooltip>
+
           </Stack>
           <Stack
             sx={{

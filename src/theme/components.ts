@@ -1,24 +1,38 @@
 import type { Components } from "@mui/material/styles";
+import type { Theme } from "@mui/material/styles";
 
-export const darkComponents: Components = {
-  MuiCard: {
+export const darkComponents: Components<Theme> = {
+  MuiDrawer: {
     styleOverrides: {
-      root: {
-        borderRadius: 12,
-        border: "1px solid #2ac3de33",
-      },
+      paper: ({ theme }: { theme: Theme }) => ({
+        backgroundColor: theme.palette.primary.dark,
+        color: theme.palette.secondary.contrastText,
+        "& .MuiIconButton-root": {
+          color: theme.palette.primary.light,
+          "&:hover": {
+            backgroundColor: theme.palette.action.hover,
+            color: theme.palette.secondary.main,
+          },
+        },
+      }),
     },
   },
 };
 
-export const lightComponents: Components = {
-  MuiCard: {
+export const lightComponents: Components<Theme> = {
+  MuiDrawer: {
     styleOverrides: {
-      root: {
-        borderRadius: 12,
-        border: "1px solid rgba(0,0,0,.05)",
-        boxShadow: "0 4px 12px rgba(56,58,66,.05)",
-      },
+      paper: ({ theme }: { theme: Theme }) => ({
+        backgroundColor: theme.palette.primary.dark,
+        color: theme.palette.secondary.contrastText,
+        "& .MuiIconButton-root": {
+          color: theme.palette.primary.light,
+          "&:hover": {
+            backgroundColor: theme.palette.action.hover,
+            color: theme.palette.secondary.main,
+          },
+        },
+      }),
     },
   },
 };
