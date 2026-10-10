@@ -1,35 +1,36 @@
-import { Box, Typography } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Typography } from "@mui/material";
 import HomePage from "./HomePage";
 import { useState } from "react";
 import { useQuery } from '@tanstack/react-query'
 import { getTractOptions } from "../client/@tanstack/react-query.gen";
 import LeafletMap from "../components/LeafletSelector";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../store/store";
 
 
 export default function MapPage() {
-  const [panel, __] = useState<
+  const [panel, _] = useState<
     "dashboard" | "wallet" | null
   >(null);
-  const { data: censusData, isPending, isError, error } = useQuery(
+
+  const {
+    data: censusData,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useQuery(
     getTractOptions({
       path: {
-        id: '0cf0f8fd-8aba-4e83-96cf-381a3378e7e0',
+        id: "0cf0f8fd-8aba-4e83-96cf-381a3378e7e0",
       },
-    }),
+    })
   );
 
-  const dispatch = useDispatch()
-  const selectArea = useSelector(
-    (state: RootState) => state.map.selectArea
-  );
-  console.log('selectArea', selectArea)
   return (
     <>
+      {/* Left sidebar */}
       <Box
         sx={{
-          width: '30%',
+          width: "30%",
           flexShrink: 0,
           borderRight: 1,
           borderColor: "divider",
@@ -37,9 +38,46 @@ export default function MapPage() {
           p: 2,
         }}
       >
-        <Typography variant="h6">Tract {censusData?.censuscode}</Typography>
+        {isPending && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              p: 4,
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+
+        {isError && (
+          <Alert
+            severity="error"
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={() => refetch()}
+              >
+                Retry
+              </Button>
+            }
+          >
+            {error.detail?.map((err) => err.msg).join(", ") ??
+              "An unexpected error occurred"}
+          </Alert>
+        )}
+
+        {censusData && (
+          <Typography variant="h6">
+            Tract {censusData.censuscode}
+          </Typography>
+        )}
+
         {panel === "dashboard" && <HomePage />}
       </Box>
+
       {/* Main content */}
       <Box
         component="main"
@@ -54,5 +92,5 @@ export default function MapPage() {
         </Box>
       </Box>
     </>
-  )
+  );
 }

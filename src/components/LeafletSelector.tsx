@@ -6,11 +6,12 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { useIPInfo } from "../hooks/useIPInfo";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
+import { Alert, Box, Button, CircularProgress } from "@mui/material";
 
 export default function LeafletSelector() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
-  const { data: ipData, isPending, isError, error } = useIPInfo();
+  const { data: ipData, isPending, isError, error, refetch } = useIPInfo();
   let center = useSelector(
     (state: RootState) => state.map.center
   );
@@ -80,12 +81,44 @@ export default function LeafletSelector() {
   }, [ipData]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-    />
+    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      {isPending && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            p: 4,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
+
+      {isError && (
+        <Alert
+          severity="error"
+          action={
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => refetch()}
+            >
+              Retry
+            </Button>
+          }
+        >
+          {error.message}
+        </Alert>
+      )}
+
+      <div
+        ref={containerRef}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+      />
+    </div>
   );
 }
