@@ -3,18 +3,28 @@ import HomePage from "./HomePage";
 import { useState } from "react";
 import { useQuery } from '@tanstack/react-query'
 import { getTractOptions } from "../client/@tanstack/react-query.gen";
+import LeafletMap from "../components/LeafletSelector";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../store/store";
+
 
 export default function MapPage() {
   const [panel, __] = useState<
     "dashboard" | "wallet" | null
   >(null);
-  const { data, isPending, isError, error } = useQuery(
+  const { data: censusData, isPending, isError, error } = useQuery(
     getTractOptions({
       path: {
         id: '0cf0f8fd-8aba-4e83-96cf-381a3378e7e0',
       },
     }),
   );
+
+  const dispatch = useDispatch()
+  const selectArea = useSelector(
+    (state: RootState) => state.map.selectArea
+  );
+  console.log('selectArea', selectArea)
   return (
     <>
       <Box
@@ -27,8 +37,7 @@ export default function MapPage() {
           p: 2,
         }}
       >
-        <Typography variant="h4">Census Tract</Typography>
-        {data?.aland}
+        <Typography variant="h6">Tract {censusData?.censuscode}</Typography>
         {panel === "dashboard" && <HomePage />}
       </Box>
       {/* Main content */}
@@ -38,23 +47,10 @@ export default function MapPage() {
           flexGrow: 1,
           minWidth: 0,
           bgcolor: "background.default",
-          p: 3,
         }}
       >
-        <Box>
-          <Typography variant="h2">County</Typography>
-          <br />
-          <Typography>
-            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-          </Typography>
-          <br />
-          <Typography>
-            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-          </Typography>
-          <br />
-          <Typography>
-            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-          </Typography>
+        <Box sx={{ width: "100%", height: "100vh", p: 2 }}>
+          <LeafletMap />
         </Box>
       </Box>
     </>

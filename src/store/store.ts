@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
 import settingReducer from "./settingSlice"
+import mapReducer from "./mapSlice"
 
 export const store = configureStore({
   reducer: {
     setting: settingReducer,
+    map: mapReducer,
   }
 })
 
