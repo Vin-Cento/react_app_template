@@ -19,6 +19,9 @@ const mapSlice = createSlice({
     setSelectArea: (state, action: PayloadAction<GeoJsonFeature>) => {
       state.selectArea = action.payload;
     },
+    clearSelectArea: (state) => {
+      state.selectArea = null;
+    },
     setCenter: (state, action: PayloadAction<L.LatLngTuple>) => {
       state.center = action.payload
     },
@@ -27,6 +30,7 @@ const mapSlice = createSlice({
 
 export const {
   setSelectArea,
+  clearSelectArea,
   setCenter,
 } = mapSlice.actions;
 

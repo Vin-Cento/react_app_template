@@ -3,7 +3,7 @@ import HomePage from "./HomePage";
 import { useState } from "react";
 import { useQuery } from '@tanstack/react-query'
 import { getTractOptions } from "../client/@tanstack/react-query.gen";
-import LeafletMap from "../components/LeafletSelector";
+import LeafleSelector from "../components/map/LeafletSelector";
 
 
 export default function MapPage() {
@@ -88,7 +88,7 @@ export default function MapPage() {
         }}
       >
         <Box sx={{ width: "100%", height: "100vh", p: 2 }}>
-          <LeafletMap />
+          <LeafleSelector />
         </Box>
       </Box>
     </>

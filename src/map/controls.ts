@@ -1,0 +1,15 @@
+export const mapControls = {
+  position: "topleft" as const,
+  drawMarker: false,
+  drawCircleMarker: false,
+  drawPolyline: false,
+  drawCircle: false,
+  drawText: false,
+  drawPolygon: true,
+  drawRectangle: true,
+  editMode: true,
+  dragMode: true,
+  removalMode: true,
+  cutPolygon: false,
+  rotateMode: false,
+}
