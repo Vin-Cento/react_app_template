@@ -3,13 +3,17 @@ import type { GeoJsonFeature } from "../client";
 import L from "leaflet";
 
 interface MapState {
-  selectArea: GeoJsonFeature | null;
-  center: L.LatLngTuple | null
+  selectArea: GeoJsonFeature | undefined;
+  focusArea: GeoJsonFeature | undefined;
+  areas: GeoJsonFeature[] | undefined;
+  center: L.LatLngTuple | undefined
 }
 
 const initialState: MapState = {
-  center: null,
-  selectArea: null,
+  center: undefined,
+  selectArea: undefined,
+  focusArea: undefined,
+  areas: undefined,
 };
 
 const mapSlice = createSlice({
@@ -20,7 +24,7 @@ const mapSlice = createSlice({
       state.selectArea = action.payload;
     },
     clearSelectArea: (state) => {
-      state.selectArea = null;
+      state.selectArea = undefined;
     },
     setCenter: (state, action: PayloadAction<L.LatLngTuple>) => {
       state.center = action.payload
