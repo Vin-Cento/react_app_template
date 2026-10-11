@@ -24,7 +24,28 @@ export default function FocusAreaDescription({ area }: Props) {
         {area.censuscode}
       </Typography>
       <Typography variant="body1">
-        Tract {area.censuscode} is located in the state of {area.state_name} within the county of {area.namelsadco}.
+        Tract{" "}
+        <Box component="span" sx={{
+          fontWeight: "bold",
+          color: "primary.contrastText",
+        }}>
+          {area.censuscode}
+        </Box>
+        {" "}is located in the state of{" "}
+        <Box component="span" sx={{
+          fontWeight: "bold",
+          color: "primary.contrastText",
+        }}>
+          {area.state_name}
+        </Box>
+        {" "}within{" "}
+        <Box component="span" sx={{
+          fontWeight: "bold",
+          color: "primary.contrastText"
+        }}>
+          {area.namelsadco}
+        </Box>
+        .
       </Typography>
     </>
   );

@@ -6,11 +6,13 @@ export const darkPalette: PaletteOptions = {
     main: "#7aa2f7",
     light: "#b4f9f8",
     dark: "#3d59a1",
+    contrastText: "#0db9d7",
   },
   secondary: {
     main: "#bb9af7",
     light: "#e0af68",
     dark: "#9d7cd8",
+    contrastText: "#e0af68",
   },
   background: {
     default: "#1a1b26",
@@ -33,10 +35,12 @@ export const lightPalette: PaletteOptions = {
     main: "#34548a",
     light: "#7aa2f7",
     dark: "#1f2335",
+    contrastText: "#f7768e",
   },
   secondary: {
     main: "#5a4a78",
     light: "#bb9af7",
+    contrastText: "#f7768e",
   },
   background: {
     default: "#e1e2e7",

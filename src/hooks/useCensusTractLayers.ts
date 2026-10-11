@@ -43,17 +43,18 @@ export function useCensusTractLayers(
     // create a resultsLayer end
 
     if (tract?.data?.length) {
+      const focusArea = tract.data[0]
       dispatch(setArea(tract.data))
-      dispatch(setFocusArea(tract.data[0]))
-      const features = tract.data.map((item) => ({
+      dispatch(setFocusArea(focusArea))
+      const features = [{
         type: "Feature" as const,
         properties: {
-          id: item.id,
-          name: item.name,
-          geoid: item.geoid,
+          id: focusArea.id,
+          name: focusArea.name,
+          geoid: focusArea.geoid,
         },
-        geometry: item.geometry,
-      }));
+        geometry: focusArea.geometry,
+      }]
 
       resultsLayer.addData({
         type: "FeatureCollection",
