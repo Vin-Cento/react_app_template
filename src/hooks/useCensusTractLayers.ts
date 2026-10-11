@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import L from "leaflet";
 import type { useCensusTracts } from "./useCensusTracts";
+import { useDispatch } from "react-redux";
+import { setArea, setFocusArea } from "../store/mapSlice";
 
 type TractData = NonNullable<
   ReturnType<typeof useCensusTracts>["data"]
@@ -10,6 +12,7 @@ export function useCensusTractLayers(
   map: L.Map | null,
   tract: TractData | undefined
 ) {
+  const dispatch = useDispatch()
   useEffect(() => {
     if (!map) return;
 
@@ -40,6 +43,8 @@ export function useCensusTractLayers(
     // create a resultsLayer end
 
     if (tract?.data?.length) {
+      dispatch(setArea(tract.data))
+      dispatch(setFocusArea(tract.data[0]))
       const features = tract.data.map((item) => ({
         type: "Feature" as const,
         properties: {

@@ -1,11 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { GeoJsonFeature } from "../client";
+import type { CensusTractSchema, GeoJsonFeature } from "../client";
 import L from "leaflet";
 
 interface MapState {
   selectArea: GeoJsonFeature | null;
-  areas: GeoJsonFeature[] | null;
-  focusArea: GeoJsonFeature | null;
+  areas: CensusTractSchema[] | null;
+  focusArea: CensusTractSchema | null;
   center: L.LatLngTuple | null
 }
 
@@ -26,6 +26,18 @@ const mapSlice = createSlice({
     clearSelectArea: (state) => {
       state.selectArea = null;
     },
+    setArea: (state, action: PayloadAction<CensusTractSchema[]>) => {
+      state.areas = action.payload;
+    },
+    clearArea: (state) => {
+      state.areas = null;
+    },
+    setFocusArea: (state, action: PayloadAction<CensusTractSchema>) => {
+      state.focusArea = action.payload;
+    },
+    clearFocusArea: (state) => {
+      state.focusArea = null;
+    },
     setCenter: (state, action: PayloadAction<L.LatLngTuple>) => {
       state.center = action.payload
     },
@@ -35,6 +47,10 @@ const mapSlice = createSlice({
 export const {
   setSelectArea,
   clearSelectArea,
+  setArea,
+  clearArea,
+  setFocusArea,
+  clearFocusArea,
   setCenter,
 } = mapSlice.actions;
 

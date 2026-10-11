@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import TextPlaceHolder from "../placeholder/TextPlaceHolder";
+import type { CensusTractSchema } from "../../client";
 
 interface Props {
-  title: string;
+  area: CensusTractSchema;
 }
 
-export default function FocusAreaDescription({ title }: Props) {
+export default function FocusAreaDescription({ area }: Props) {
   return (
     <>
       <Box
@@ -20,10 +20,12 @@ export default function FocusAreaDescription({ title }: Props) {
         alt="The house from the offer."
         src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
       />
-      <Typography variant="h4">
-        {title}
+      <Typography variant="h4" sx={{ m: 1 }}>
+        {area.censuscode}
       </Typography>
-      <TextPlaceHolder />
+      <Typography variant="body1">
+        Tract {area.censuscode} is located in the state of {area.state_name} within the county of {area.namelsadco}.
+      </Typography>
     </>
   );
 }
