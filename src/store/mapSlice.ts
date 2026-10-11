@@ -3,28 +3,13 @@ import type { GeoJsonFeature } from "../client";
 import L from "leaflet";
 
 interface MapState {
-  selectArea: GeoJsonFeature;
+  selectArea: GeoJsonFeature | null;
   center: L.LatLngTuple | null
 }
 
 const initialState: MapState = {
-  center: [39.7392, -104.9903],
-  selectArea: {
-    type: "Feature",
-    properties: {},
-    geometry: {
-      type: "Polygon",
-      coordinates: [
-        [
-          [-104.994686, 39.902362],
-          [-105.233539, 39.725145],
-          [-104.963113, 39.475426],
-          [-104.570515, 39.660685],
-          [-104.994686, 39.902362],
-        ],
-      ],
-    },
-  },
+  center: null,
+  selectArea: null,
 };
 
 const mapSlice = createSlice({

@@ -86,10 +86,7 @@ export type CensusTractSchema = {
      * Awater
      */
     awater: number;
-    /**
-     * Geometry
-     */
-    geometry: unknown;
+    geometry?: GeoJsonGeometry | null;
     /**
      * State
      */
@@ -142,11 +139,11 @@ export type GeoJsonGeometry = {
     /**
      * Type
      */
-    type: string;
+    type: 'Polygon' | 'MultiPolygon';
     /**
      * Coordinates
      */
-    coordinates: unknown;
+    coordinates: Array<unknown>;
 };
 
 /**
