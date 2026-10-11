@@ -1,8 +1,8 @@
-import { Alert, Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Alert, Box, Button, CircularProgress } from "@mui/material";
 // import { useState } from "react";
 import { useQuery } from '@tanstack/react-query'
 import { getTractOptions } from "../../client/@tanstack/react-query.gen";
-import TextPlaceHolder from "../placeholder/TextPlaceHolder";
+import FocusAreaDescription from "./MapDescription";
 
 
 export default function MapSidePanel() {
@@ -62,22 +62,7 @@ export default function MapSidePanel() {
           <Box
             sx={{ borderRadius: 3, overflow: "auto", maxHeight: "95vh" }}
           >
-            <Box
-              component="img"
-              sx={{
-                width: "100%",
-                height: '15rem',
-                objectFit: "cover",
-                objectPosition: "center",
-                display: "block",
-              }}
-              alt="The house from the offer."
-              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
-            />
-            <Typography variant="h4">
-              Tract {censusData.censuscode}
-            </Typography>
-            <TextPlaceHolder />
+            <FocusAreaDescription title={censusData.name} />
           </Box>
         </>
       )}
