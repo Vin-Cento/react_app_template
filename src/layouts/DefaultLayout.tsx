@@ -1,113 +1,132 @@
 import {
   AppBar,
   Box,
-  Divider,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
   Typography,
-  Button
+  Button,
+  List,
+  ListItemButton,
+  ListItemText,
+  Container,
 } from "@mui/material";
 
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import SettingsIcon from "@mui/icons-material/Settings";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import ThemeSwitch from "../components/ThemeSwitch";
 
-const drawerWidth = 240;
+const sections = [
+  { id: "introduction", label: "Introduction" },
+  { id: "architecture", label: "Architecture" },
+  { id: "database", label: "Database" },
+  { id: "api", label: "API" },
+  { id: "conclusion", label: "Conclusion" },
+];
+
 
 function DefaultLayout() {
-
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh" }}>
+    <Container
+      sx={{
+        display: "grid",
+        gridTemplateColumns: {
+          xs: "1fr",
+          lg: "220px minmax(0, 1fr)",
+        },
+        gap: 4,
+        py: 4,
+      }}
+    >
       {/* Top navbar */}
       <AppBar
         position="fixed"
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
+          // maxWidth: ""
         }}
       >
-        <Toolbar>
-          <Typography variant="h6" noWrap>
-            Awesome App
-          </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <Button>
-            Request
-          </Button>
-          <Button>
-            Donate
-          </Button>
+        <Container>
+          <Toolbar
+            sx={{
+              "& .nav-button": {
+                alignSelf: "stretch",
+                borderRadius: 0,
+              },
+            }}
 
-          <ThemeSwitch />
-        </Toolbar>
+          >
+            <Typography variant="h6" noWrap>
+              Awesome App
+            </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <Button
+              color="inherit"
+              component={Link} to="/request"
+              className="nav-button"
+            >
+              Request
+            </Button>
+            <Button
+              color="inherit"
+              component={Link} to="/donate"
+              className="nav-button"
+            >
+              Donate
+            </Button>
+
+            <ThemeSwitch />
+          </Toolbar>
+        </Container>
       </AppBar>
 
-      {/* Sidebar */}
-      <Drawer
-        variant="permanent"
+      <Box
+        component="aside"
         sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
+          bgcolor: "background.default",
+          display: {
+            xs: "none",
+            lg: "block",
           },
+          margin: 5,
         }}
       >
-        <Toolbar />
+        <Box
+          sx={{
+            position: "sticky",
+            top: 80,
+          }}
+        >
+          <Typography
+            variant="overline"
+            color="text.secondary"
+          >
+            On this page
+          </Typography>
 
-        <Box sx={{ overflow: "auto" }}>
-          <List>
-            <ListItemButton>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-
-              <ListItemText primary="Dashboard" />
-            </ListItemButton>
-
-            <ListItemButton>
-              <ListItemIcon>
-                <AccountBalanceWalletIcon />
-              </ListItemIcon>
-
-              <ListItemText primary="Goals" />
-            </ListItemButton>
-          </List>
-
-          <Divider />
-
-          <List>
-            <ListItemButton>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-
-              <ListItemText primary="Settings" />
-            </ListItemButton>
+          <List dense>
+            {sections.map((section) => (
+              <ListItemButton
+                key={section.id}
+                component="a"
+                href={`#${section.id}`}
+              >
+                <ListItemText primary={section.label} />
+              </ListItemButton>
+            ))}
           </List>
         </Box>
-      </Drawer>
+      </Box>
 
-      {/* Page content */}
+      {/* Blog */}
       <Box
         component="main"
         sx={{
-          flexGrow: 1,
-          bgcolor: "background.default",
-          p: 3,
+          minWidth: 0,
+          maxWidth: 800,
         }}
       >
         <Toolbar />
         <Outlet />
       </Box>
-    </Box>
+    </Container>
   );
 }
 
