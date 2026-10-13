@@ -9,6 +9,7 @@ import { useLeafletMap } from "../../hooks/useLeafletMap";
 import { useGeoman } from "../../hooks/useGeoman";
 import { useCensusTractLayers } from "../../hooks/useCensusTractLayers";
 import type { useCensusTracts } from "../../hooks/useCensusTracts";
+import { useMapResize } from "../../hooks/useMapResize";
 
 interface Props {
   tract: ReturnType<typeof useCensusTracts>["data"];
@@ -35,6 +36,7 @@ export default function LeafletMap({
     [dispatch, onSelectionChange]
   );
 
+  useMapResize(map)
   useGeoman(map, handlePolygonCreated);
   useCensusTractLayers(map, tract);
 
