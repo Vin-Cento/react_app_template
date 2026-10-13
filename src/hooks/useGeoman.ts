@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import L from "leaflet";
+import type L from "leaflet";
 
 import "@geoman-io/leaflet-geoman-free";
 import type { GeoJsonFeature } from "../client";
@@ -12,27 +12,42 @@ export function useGeoman(
   useEffect(() => {
     if (!map) return;
 
-    map.pm.addControls(mapControls);
+    const leafletMap = map; // TypeScript knows this is L.Map
 
-    const handleCreate = (event: { layer: L.Layer }) => {
-      const layer = event.layer;
+    let cancelled = false;
+    let handleCreate: ((event: { layer: L.Layer }) => void) | null = null;
 
-      if (!(layer instanceof L.Polygon)) return;
+    async function initializeGeoman() {
+      const { default: L } = await import("leaflet");
 
-      const geojson =
-        layer.toGeoJSON() as GeoJsonFeature;
+      if (cancelled) return;
 
-      onPolygonCreated(geojson);
+      leafletMap.pm.addControls(mapControls);
 
-      // Keep the geometry in state, but not on the map
-      map.removeLayer(layer);
-    };
+      handleCreate = (event: { layer: L.Layer }) => {
+        const layer = event.layer;
 
-    map.on("pm:create", handleCreate);
+        if (!(layer instanceof L.Polygon)) return;
+
+        const geojson = layer.toGeoJSON() as GeoJsonFeature;
+
+        onPolygonCreated(geojson);
+        leafletMap.removeLayer(layer);
+      };
+
+      leafletMap.on("pm:create", handleCreate);
+    }
+
+    void initializeGeoman();
 
     return () => {
-      map.off("pm:create", handleCreate);
-      map.pm.removeControls();
+      cancelled = true;
+
+      if (handleCreate) {
+        leafletMap.off("pm:create", handleCreate);
+      }
+
+      leafletMap.pm?.removeControls();
     };
   }, [map, onPolygonCreated]);
 }

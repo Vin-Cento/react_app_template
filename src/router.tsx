@@ -3,8 +3,6 @@ import { lazy } from "react";
 
 const DefaultLayout = lazy(() => import("./layouts/DefaultLayout"));
 const HomePage = lazy(() => import("./pages/HomePage"));
-const BlogLayout = lazy(() => import("./layouts/BlogLayout"));
-const BlogPage = lazy(() => import("./pages/BlogPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ToolLayout = lazy(() => import("./layouts/ToolLayout"));
 const MapPage = lazy(() => import("./pages/MapPage"));
@@ -20,16 +18,6 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
     ],
-  },
-  {
-    path: "/blog",
-    element: <BlogLayout />,
-    children: [
-      {
-        index: true,
-        element: <BlogPage />
-      }
-    ]
   },
   {
     path: "/map",

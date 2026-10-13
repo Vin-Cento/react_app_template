@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import L from "leaflet";
+import type L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
-
-import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
-
-const DEFAULT_ZOOM = 12;
+const DEFAULT_ZOOM = 14;
 
 export function useLeafletMap(
   center: L.LatLngTuple | null
@@ -16,26 +13,35 @@ export function useLeafletMap(
 
   // Create and destroy the Leaflet instance
   useEffect(() => {
-    if (!containerRef.current) return;
+    let cancelled = false;
+    let instance: L.Map | null = null;
 
-    const instance = L.map(containerRef.current, {
-      center: undefined,
-      zoom: DEFAULT_ZOOM,
-    });
+    async function initializeMap() {
+      const { default: L } = await import("leaflet");
 
-    L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19,
-      }
-    ).addTo(instance);
+      if (cancelled || !containerRef.current) return;
 
-    setMap(instance);
+      instance = L.map(containerRef.current, {
+        zoom: DEFAULT_ZOOM,
+      });
+
+      L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          maxZoom: 19,
+        }
+      ).addTo(instance);
+
+      setMap(instance);
+    }
+
+    void initializeMap();
 
     return () => {
-      instance.remove();
+      cancelled = true;
+      instance?.remove();
     };
   }, []);
 

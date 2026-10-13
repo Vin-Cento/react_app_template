@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import L from "leaflet";
+import type L from "leaflet";
 import type { useCensusTracts } from "./useCensusTracts";
 import { useDispatch } from "react-redux";
 import { setArea, setFocusArea } from "../store/mapSlice";
@@ -12,66 +12,85 @@ export function useCensusTractLayers(
   map: L.Map | null,
   tract: TractData | undefined
 ) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (!map) return;
 
-    // create a resultsLayer start
-    const resultsLayer = L.geoJSON(undefined, {
-      style: {
-        color: "#2196f3",
-        weight: 2,
-        fillColor: "#2196f3",
-        fillOpacity: 0.2,
-      },
+    let cancelled = false;
+    let resultsLayer: L.GeoJSON | null = null;
 
-      onEachFeature: (feature, layer) => {
-        const container = document.createElement("div");
-        const name = document.createElement("strong");
-        const geoid = document.createElement("p");
+    async function initializeLayers() {
+      const { default: L } = await import("leaflet");
 
-        name.textContent =
-          String(feature.properties?.name ?? "");
+      if (cancelled || !map) return;
 
-        geoid.textContent =
-          `GEOID: ${feature.properties?.geoid ?? ""}`;
-
-        container.append(name, geoid);
-        layer.bindPopup(container);
-      },
-    });
-    // create a resultsLayer end
-
-    if (tract?.data?.length) {
-      const focusArea = tract.data[0]
-      dispatch(setArea(tract.data))
-      dispatch(setFocusArea(focusArea))
-      const features = [{
-        type: "Feature" as const,
-        properties: {
-          id: focusArea.id,
-          name: focusArea.name,
-          geoid: focusArea.geoid,
+      resultsLayer = L.geoJSON(undefined, {
+        style: {
+          color: "#2196f3",
+          weight: 2,
+          fillColor: "#2196f3",
+          fillOpacity: 0.2,
         },
-        geometry: focusArea.geometry,
-      }]
 
-      resultsLayer.addData({
-        type: "FeatureCollection",
-        features,
-      } as GeoJSON.FeatureCollection);
+        onEachFeature: (feature, layer) => {
+          const container = document.createElement("div");
+          const name = document.createElement("strong");
+          const geoid = document.createElement("p");
 
-      resultsLayer.addTo(map);
+          name.textContent = String(
+            feature.properties?.name ?? ""
+          );
 
-      const bounds = resultsLayer.getBounds();
+          geoid.textContent =
+            `GEOID: ${feature.properties?.geoid ?? ""}`;
 
-      if (bounds.isValid()) {
-        map.fitBounds(bounds);
+          container.append(name, geoid);
+          layer.bindPopup(container);
+        },
+      });
+
+      if (tract?.data?.length) {
+        const focusArea = tract.data[0];
+
+        dispatch(setArea(tract.data));
+        dispatch(setFocusArea(focusArea));
+
+        const features = [
+          {
+            type: "Feature" as const,
+            properties: {
+              id: focusArea.id,
+              name: focusArea.name,
+              geoid: focusArea.geoid,
+            },
+            geometry: focusArea.geometry,
+          },
+        ];
+
+        resultsLayer.addData({
+          type: "FeatureCollection",
+          features,
+        } as GeoJSON.FeatureCollection);
+
+        resultsLayer.addTo(map);
+
+        const bounds = resultsLayer.getBounds();
+
+        if (bounds.isValid()) {
+          map.fitBounds(bounds);
+        }
       }
     }
 
+    void initializeLayers();
+
     return () => {
-      map.removeLayer(resultsLayer);
+      cancelled = true;
+
+      if (resultsLayer && map.hasLayer(resultsLayer)) {
+        map.removeLayer(resultsLayer);
+      }
     };
-  }, [map, tract]);
+  }, [map, tract, dispatch]);
 }
